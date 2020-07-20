@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model RichEditSubmit.Models.TestModel
+
+<script src="~/node_modules/jszip/dist/jszip.min.js"></script>
+<script src="~/node_modules/devextreme/dist/js/dx.all.js"></script>
+<link href="~/node_modules/devextreme/dist/css/dx.common.css" rel="stylesheet" />
+<link href="~/node_modules/devextreme/dist/css/dx.light.css" rel="stylesheet" />
+
+@* If you export a document to PDF on the client side (the exportToPdf method) or enable client PDF printing mode,
+    you should register the pdfkit library before control script registration.*@
+<script src="~/node_modules/devexpress-richedit/dist/pdfkit.js"></script>
+
+<script src="~/node_modules/devexpress-richedit/dist/dx.richedit.js"></script>
+<link href="~/node_modules/devexpress-richedit/dist/dx.richedit.css" rel="stylesheet" />
+
+<script>
+    function onSubmitButtonClick() {
+        richEdit.saveDocument();
+        return false;
+    }
+    function onSaving(s, e) {
+        Base64.value = e.base64;
+        Format.value = e.format;
+        e.handled = true;
+        $('form').submit();
+    }
+</script>
+
+<form asp-controller="Home" asp-action="Index">
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.Base64)
+    @Html.HiddenFor(m => m.Format)
+    @Html.TextAreaFor(m => m.Description, new { style= "width: 100%" })
+    <button onclick="return onSubmitButtonClick()">Submit</button>
+    @Html.DevExpress().RichEdit("richEdit").Open(() => { return Convert.FromBase64String(Model.Base64); }, (DevExpress.AspNetCore.RichEdit.DocumentFormat)Model.Format).OnSaving("onSaving")
+</form>
