@@ -3,6 +3,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DevExpress.AspNetCore.RichEdit" Version="20.1.6" />
+    <PackageReference Include="DevExpress.AspNetCore.RichEdit" Version="20.1.7" />
   </ItemGroup>
 </Project>
